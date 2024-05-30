@@ -1,4 +1,4 @@
-import { Note as N } from "@prisma/client";
+import type { Note as N } from "@prisma/client";
 import { TrashIcon } from "@radix-ui/react-icons";
 import {
   Accordion,

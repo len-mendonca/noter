@@ -1,12 +1,8 @@
-import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { CreatePost } from "~/app/_components/create-post";
 import { authOptions } from "~/server/auth";
-
-import { api } from "~/trpc/server";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);

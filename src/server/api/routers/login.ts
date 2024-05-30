@@ -11,7 +11,7 @@ export const loginRouter = createTRPCRouter({
   signup: publicProcedure
     .input(RegisterSchema)
     .mutation(async ({ ctx, input }) => {
-      if (ctx.session?.user || ctx.session) {
+      if (ctx.session?.user ?? ctx.session) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "You are logged in",
@@ -46,16 +46,10 @@ export const loginRouter = createTRPCRouter({
       }
     }),
   signIn: publicProcedure.input(LoginSchema).mutation(async ({ input }) => {
-    console.log("Entereddddd");
-
     const { email, password } = input;
     const getExistingUser = await getUserByEmail(email);
 
-    if (
-      !getExistingUser ||
-      !getExistingUser.email ||
-      !getExistingUser.password
-    ) {
+    if (!getExistingUser?.email || !getExistingUser?.password) {
       throw new TRPCError({
         code: "BAD_REQUEST",
         message: "Invalid credentials",

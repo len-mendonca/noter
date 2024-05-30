@@ -11,8 +11,6 @@ const NoteEditor = ({
   onSave: (note: { title: string; content: string }) => void;
   topicId: string;
 }) => {
-  console.log("topicId ", topicId);
-
   const [code, setCode] = useState<string>("");
   const [tile, setTile] = useState<string>("");
   useEffect(() => {

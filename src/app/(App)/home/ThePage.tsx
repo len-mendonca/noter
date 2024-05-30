@@ -4,16 +4,10 @@ import { useRouter } from "next/navigation";
 import { api } from "~/trpc/react";
 import SignOutButton from "../../_components/SignOutButton";
 import { useEffect, useState } from "react";
-import { Topic } from "@prisma/client";
-import { NextPage } from "next";
+import type { Topic } from "@prisma/client";
+import type { NextPage } from "next";
 import { TrashIcon } from "@radix-ui/react-icons";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "~/components/ui/accordion";
 import NoteEditor from "./NoteEditor";
 import Note from "./Note";
 
@@ -38,7 +32,7 @@ const ThePage: NextPage = () => {
   const { data: Notes, refetch: refetchNotes } = notes;
 
   const createdNote = api.note.create.useMutation({
-    onSuccess: () => refetchNotes(),
+    onSuccess: () => void refetchNotes(),
     onError: () => alert("Couldnt create a note"),
   });
 
@@ -65,13 +59,12 @@ const ThePage: NextPage = () => {
   useEffect(() => {
     if (!topics || topics.length === 0) {
       setSelectedTopic(null);
-      console.log("Selected topic set to null due to empty topics list");
     }
   }, [topics]);
 
   const topic = api.topic.create.useMutation({
     onSuccess: () => {
-      refetchTopics();
+      void refetchTopics();
     },
     onError: () => {
       alert("Unable to create topic");
@@ -82,7 +75,7 @@ const ThePage: NextPage = () => {
     <main className=" min-h-screen   bg-white text-white">
       <section className="flex h-[60px] items-center justify-between rounded-b-md bg-black pb-2">
         <h1 className=" px-4 text-6xl font-extrabold tracking-tight text-white sm:text-[4.5rem]">
-          {session.data?.user.name}'s Notes
+          {session.data?.user.name} <span>&apos; s Notes</span>
         </h1>
         <SignOutButton />
       </section>
@@ -94,7 +87,7 @@ const ThePage: NextPage = () => {
                 <li
                   onClick={() => {
                     setSelectedTopic(topic);
-                    refetchNotes();
+                    void refetchNotes();
                   }}
                   className={`mx-1 my-2 grid w-4/5 grid-cols-12 items-center  justify-between rounded-lg border  bg-white px-2 py-1 text-slate-500 hover:bg-slate-200 ${onclick === null ? `bg-white` : `bg-slate-200`}`}
                   key={topic.id}
@@ -106,7 +99,7 @@ const ThePage: NextPage = () => {
                   <div className="col-span-2 rounded-xl p-2 hover:bg-slate-300">
                     <TrashIcon
                       onClick={() => {
-                        deleteTopic.mutateAsync({ id: topic.id });
+                        void deleteTopic.mutateAsync({ id: topic.id });
                       }}
                       className="  h-5 w-5   "
                     />
@@ -121,7 +114,7 @@ const ThePage: NextPage = () => {
                 type="text"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
-                    topic.mutateAsync({
+                    void topic.mutateAsync({
                       title: e.currentTarget.value,
                     });
                     e.currentTarget.value = "";
@@ -141,16 +134,16 @@ const ThePage: NextPage = () => {
               <Note
                 note={note}
                 onDelete={() => {
-                  deleteNote.mutateAsync({ id: note.id });
+                  void deleteNote.mutateAsync({ id: note.id });
                 }}
               />
             </div>
           ))}
           <div>
             <NoteEditor
-              topicId={selectedTopic?.id || ""}
+              topicId={selectedTopic?.id ?? ""}
               onSave={({ content, title }) => {
-                createdNote.mutateAsync({
+                void createdNote.mutateAsync({
                   title,
                   content,
                   topicId: selectedTopic?.id ?? "",

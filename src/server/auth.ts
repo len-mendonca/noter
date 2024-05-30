@@ -12,7 +12,6 @@ import { env } from "~/env";
 import { db } from "~/server/db";
 import { LoginSchema } from "./schemas/zod-schema";
 import { getUserByEmail } from "~/utils/auth";
-import NextAuth from "next-auth/next";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -57,9 +56,8 @@ export const authOptions: NextAuthOptions = {
       }
       if (session.user) {
         session.user.name = token.name;
-        session.user.email = token.email as string;
+        session.user.email = token.email!;
       }
-      console.log("Session", session);
 
       return {
         ...session,
@@ -82,20 +80,15 @@ export const authOptions: NextAuthOptions = {
 
       credentials: {},
       async authorize(credentials) {
-        console.log("COmeonnnnnnnnnnnnnnnnnnnnnnnnn");
-        console.log(credentials);
-
         const validateFields = LoginSchema.safeParse(credentials);
         if (validateFields.success) {
           const { email, password } = validateFields.data;
           const user = await getUserByEmail(email);
-          if (!user || !user.password) {
+          if (!user?.password) {
             return null;
           }
           const passwordMatch = await bcrypt.compare(password, user.password);
           if (passwordMatch) {
-            console.log("Userrrrrrrrrrrrrrrrrrrrrrrrrrrr", user);
-
             return user;
           }
         }

@@ -45,7 +45,7 @@ export const topicRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       try {
-        const notes = await ctx.db.note.deleteMany({
+        await ctx.db.note.deleteMany({
           where: {
             topicId: input.id,
           },

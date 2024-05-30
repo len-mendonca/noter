@@ -3,7 +3,7 @@ import "~/styles/globals.css";
 import { Inter } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import { getServerAuthSession } from "~/server/auth";
+
 import AuthProvider from "./_components/AuthProvider";
 
 const inter = Inter({

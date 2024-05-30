@@ -3,7 +3,7 @@ import { Button } from "~/components/ui/button";
 import { signIn } from "next-auth/react";
 const Socials = () => {
   const onSubmit = (provider: "github") => {
-    signIn(provider, {
+    void signIn(provider, {
       callbackUrl: "/home",
     });
   };

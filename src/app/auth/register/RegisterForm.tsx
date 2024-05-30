@@ -2,7 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaGithub } from "react-icons/fa";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 import { Button } from "~/components/ui/button";
 import {
   Form,
@@ -44,7 +44,7 @@ const RegisterForm = () => {
     setError("");
     setSuccess("");
     startTransition(async () => {
-      user.mutateAsync(values);
+      void user.mutateAsync(values);
     });
   };
 

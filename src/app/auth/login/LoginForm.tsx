@@ -1,8 +1,8 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FaGithub } from "react-icons/fa";
+
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 import { Button } from "~/components/ui/button";
 import {
   Form,
@@ -17,8 +17,8 @@ import { LoginSchema } from "~/server/schemas/zod-schema";
 import Socials from "../Socials";
 
 import { useTransition } from "react";
-import { redirect, useRouter } from "next/navigation";
-import { getUserByEmail } from "~/utils/auth";
+import { useRouter } from "next/navigation";
+
 import { signIn } from "next-auth/react";
 
 const LoginForm = () => {
@@ -35,7 +35,6 @@ const LoginForm = () => {
   const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
     const validateFields = LoginSchema.safeParse(values);
     if (!validateFields.success) {
-      console.log("OOOOPS");
     }
 
     const { email, password } = values;
